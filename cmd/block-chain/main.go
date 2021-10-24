@@ -29,7 +29,7 @@ func main() {
 }
 
 func setupFlag() error {
-	flag.StringVar(&cfg, "config", "configs/", "指定要使用的設定檔路徑")
+	flag.StringVar(&cfg, "config", "etc/", "指定要使用的設定檔路徑")
 	flag.Parse()
 
 	return nil
