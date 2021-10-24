@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"github.com/block-chain/global"
+	"github.com/block-chain/pkg/hashing"
 	"github.com/block-chain/pkg/setting"
 )
 
@@ -25,7 +26,8 @@ func init() {
 }
 
 func main() {
-
+	next_hash := hashing.GetHash(global.Block{}, "123")
+	log.Printf("next_hash: %s", next_hash)
 }
 
 func setupFlag() error {

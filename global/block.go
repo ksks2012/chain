@@ -7,7 +7,7 @@ type Block struct {
 	Hash          string
 	Difficulty    string
 	Nonce         int
-	Timestamp     time.Duration
+	Timestamp     time.Time
 	Transactions  []Transaction
 	Miner         string
 	Miner_rewards string
