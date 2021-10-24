@@ -1,0 +1,6 @@
+BlockChain:
+  AdjustDifficultyBlocks: 10
+  Difficulty: 1
+  BlockTime: 30
+  MiningRewards: 10
+  BlockLimitation: 32
