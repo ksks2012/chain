@@ -27,7 +27,7 @@ func init() {
 
 func main() {
 	next_hash := hashing.GetHash(global.Block{}, "123")
-	log.Printf("next_hash: %s", next_hash)
+	log.Printf("next_hash: %x", next_hash)
 }
 
 func setupFlag() error {
