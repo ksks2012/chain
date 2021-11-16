@@ -6,7 +6,7 @@ import (
 	"strings"
 
 	"github.com/block-chain/global"
-	"github.com/block-chain/pkg/hashing"
+	"github.com/block-chain/pkg/blocker"
 	"github.com/block-chain/pkg/setting"
 )
 
@@ -26,8 +26,11 @@ func init() {
 }
 
 func main() {
-	next_hash := hashing.GetHash(global.Block{}, "123")
-	log.Printf("next_hash: %x", next_hash)
+	blocker.GenGenesisBlock("Hello Chain!", 2, "hong", 1)
+	for i := 0; i <= 10; i++ {
+		global.MainChain.MineBlock("hong")
+	}
+
 }
 
 func setupFlag() error {
