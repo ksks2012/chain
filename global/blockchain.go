@@ -48,7 +48,6 @@ func (bc *BlockChain) MineBlock(miner string) {
 	// mine new block and add to chain
 	log.Printf("MineBlock")
 	startTime := time.Now().Unix()
-
 	lastBlock := bc.Chain[len(bc.Chain)-1]
 	newBlock := Block{}
 	newBlock.New(lastBlock.Hash, bc.Difficulty, miner, bc.MiningRewards)
@@ -64,6 +63,7 @@ func (bc *BlockChain) MineBlock(miner string) {
 		newBlock.Hash = GetHash(newBlock, newBlock.Nonce)
 	}
 	// log.Printf("nonce %v %v", newBlock.Hash[0:bc.Difficulty], newBlock.Hash[0:(bc.Difficulty*2)])
+	newBlock.Timestamp = time.Now()
 	timeConsumed := time.Now().Unix() - startTime
 	log.Printf("Hash found: %x @ diffuculty %v, time cost: %vs", []byte(newBlock.Hash), bc.Difficulty, timeConsumed)
 	bc.Chain = append(bc.Chain, newBlock)
