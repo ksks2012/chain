@@ -12,7 +12,7 @@ type BlockChain struct {
 	AdjustDifficultyBlocks int
 	Difficulty             int
 	BlockTime              int
-	MiningRewards          int
+	MiningRewards          int64
 	BlockLimitation        int
 	Chain                  []Block
 	PendingTransactions    []Transaction
@@ -87,4 +87,27 @@ func (bc *BlockChain) adjustDifficulty() int {
 		bc.Difficulty += 1
 	}
 	return bc.Difficulty
+}
+
+func (bc *BlockChain) getSurplus(account string) (surplus int64) {
+	surplus = 0
+	for _, block := range bc.Chain {
+		miner := false
+		if block.Miner == account {
+			miner = true
+			surplus += block.MinerRewards
+		}
+		for _, transaction := range block.Transactions {
+			if miner {
+				surplus += transaction.Fee
+			}
+			if transaction.Sender == account {
+				surplus -= transaction.Amounts
+				surplus -= transaction.Fee
+			} else if transaction.Receiver == account {
+				surplus += transaction.Amounts
+			}
+		}
+	}
+	return surplus
 }

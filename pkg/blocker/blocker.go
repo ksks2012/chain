@@ -6,7 +6,7 @@ import (
 	"github.com/block-chain/global"
 )
 
-func GenGenesisBlock(previousHash []byte, difficulty int, miner string, minerRewards int) {
+func GenGenesisBlock(previousHash []byte, difficulty int, miner string, minerRewards int64) {
 	log.Printf("Create genesis block...")
 	newBlock := global.Block{
 		PreviousHash: previousHash,

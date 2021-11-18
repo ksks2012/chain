@@ -15,10 +15,10 @@ type Block struct {
 	Timestamp    int64
 	Transactions []Transaction
 	Miner        string
-	MinerRewards int
+	MinerRewards int64
 }
 
-func (b *Block) New(previousHash []byte, difficulty int, miner string, minerRewards int) {
+func (b *Block) New(previousHash []byte, difficulty int, miner string, minerRewards int64) {
 	b.PreviousHash = previousHash
 	b.Difficulty = difficulty
 	b.Nonce = 0
@@ -29,7 +29,7 @@ func (b *Block) New(previousHash []byte, difficulty int, miner string, minerRewa
 }
 
 func transactionToString(transaction Transaction) (transactionstring string) {
-	transactionstring = transaction.Sender + transaction.Receiver + transaction.Amounts + transaction.Fee + transaction.Message
+	transactionstring = fmt.Sprintf("%v%v%v%v%v", transaction.Sender, transaction.Receiver, transaction.Amounts, transaction.Fee, transaction.Message)
 	return
 }
 

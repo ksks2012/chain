@@ -3,7 +3,7 @@ package global
 type Transaction struct {
 	Sender   string
 	Receiver string
-	Amounts  string //TODO:
-	Fee      string //TODO:
+	Amounts  int64 //TODO:
+	Fee      int64 //TODO:
 	Message  string
 }
