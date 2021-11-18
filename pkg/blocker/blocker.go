@@ -15,6 +15,5 @@ func GenGenesisBlock(previousHash []byte, difficulty int, miner string, minerRew
 		MinerRewards: minerRewards,
 	}
 	newBlock.Hash = global.GetHash(newBlock, 0)
-	global.MainChain.Difficulty = newBlock.Difficulty
-	global.MainChain.Chain = append(global.MainChain.Chain, newBlock)
+	global.MainChain.New(newBlock)
 }

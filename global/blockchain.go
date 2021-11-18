@@ -22,6 +22,12 @@ var (
 	MainChain BlockChain
 )
 
+func (bc *BlockChain) New(initBlock Block) {
+	bc.AdjustDifficultyBlocks = 1
+	bc.Difficulty = initBlock.Difficulty
+	bc.Chain = append(bc.Chain, initBlock)
+}
+
 func (bc *BlockChain) AddTransactionToBlock(block Block) {
 	//  Get the transaction with highest fee by block_limitation
 	sort.SliceStable(bc.PendingTransactions, func(i, j int) bool {
