@@ -63,7 +63,7 @@ func (bc *BlockChain) MineBlock(miner string) {
 		newBlock.Hash = GetHash(newBlock, newBlock.Nonce)
 	}
 	// log.Printf("nonce %v %v", newBlock.Hash[0:bc.Difficulty], newBlock.Hash[0:(bc.Difficulty*2)])
-	newBlock.Timestamp = time.Now()
+	newBlock.Timestamp = time.Now().Unix()
 	timeConsumed := time.Now().Unix() - startTime
 	log.Printf("Hash found: %x @ diffuculty %v, time cost: %vs", []byte(newBlock.Hash), bc.Difficulty, timeConsumed)
 	bc.Chain = append(bc.Chain, newBlock)
@@ -76,8 +76,8 @@ func (bc *BlockChain) adjustDifficulty() int {
 		return bc.Difficulty
 	}
 
-	start := bc.Chain[chainLength-bc.AdjustDifficultyBlocks-1].Timestamp.Unix()
-	finish := bc.Chain[chainLength-1].Timestamp.Unix()
+	start := bc.Chain[chainLength-bc.AdjustDifficultyBlocks-1].Timestamp
+	finish := bc.Chain[chainLength-1].Timestamp
 	avgTimeConsumed := math.Round(float64(finish-start) / float64(bc.AdjustDifficultyBlocks))
 	if avgTimeConsumed > float64(bc.BlockTime) {
 		log.Printf("Average block time:%vs. Lower the difficulty", avgTimeConsumed)

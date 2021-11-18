@@ -12,7 +12,7 @@ type Block struct {
 	Hash         []byte
 	Difficulty   int
 	Nonce        int
-	Timestamp    time.Time
+	Timestamp    int64
 	Transactions []Transaction
 	Miner        string
 	MinerRewards int
@@ -22,7 +22,7 @@ func (b *Block) New(previousHash []byte, difficulty int, miner string, minerRewa
 	b.PreviousHash = previousHash
 	b.Difficulty = difficulty
 	b.Nonce = 0
-	b.Timestamp = time.Now()
+	b.Timestamp = time.Now().Unix()
 	b.Transactions = []Transaction{}
 	b.Miner = miner
 	b.MinerRewards = minerRewards
@@ -43,7 +43,7 @@ func getTransactionsString(block Block) (transactionsString string) {
 
 func GetHash(block Block, nonce int) (bs []byte) {
 	sha1Hasher := sha1.New()
-	hashInput := fmt.Sprintf("%v%v%v%v", block.PreviousHash, block.Timestamp.Unix(), getTransactionsString(block), strconv.Itoa(nonce))
+	hashInput := fmt.Sprintf("%v%v%v%v", block.PreviousHash, block.Timestamp, getTransactionsString(block), strconv.Itoa(nonce))
 	sha1Hasher.Write([]byte(hashInput))
 	bs = sha1Hasher.Sum(nil)
 	return
