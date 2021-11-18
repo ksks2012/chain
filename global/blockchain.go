@@ -1,9 +1,9 @@
 package global
 
 import (
+	"bytes"
 	"log"
 	"sort"
-	"strings"
 	"time"
 )
 
@@ -45,19 +45,15 @@ func (bc *BlockChain) MineBlock(miner string) {
 	lastBlock := bc.Chain[len(bc.Chain)-1]
 	newBlock := Block{}
 	newBlock.New(lastBlock.Hash, bc.Difficulty, miner, bc.MiningRewards)
-	// PreviousHash: lastBlock.Hash,
-	// Difficulty:   bc.Difficulty,
-	// Miner:        miner,
-	// MinerRewards: bc.MiningRewards,
 
 	bc.AddTransactionToBlock(newBlock)
 	newBlock.PreviousHash = lastBlock.Hash
 	newBlock.Difficulty = bc.Difficulty
-	newBlock.Hash = string(GetHash(newBlock, newBlock.Nonce))
+	newBlock.Hash = GetHash(newBlock, newBlock.Nonce)
 
-	for ; newBlock.Hash[0:bc.Difficulty] != strings.Repeat("0", bc.Difficulty); newBlock.Nonce++ {
-		// log.Printf("newBlock.Hash |%v| %v", strings.Repeat("0", bc.Difficulty))
-		newBlock.Hash = string(GetHash(newBlock, newBlock.Nonce))
+	nonce := make([]byte, bc.Difficulty)
+	for ; !bytes.Equal(newBlock.Hash[0:bc.Difficulty], nonce); newBlock.Nonce++ {
+		newBlock.Hash = GetHash(newBlock, newBlock.Nonce)
 	}
 
 	timeConsumed := time.Now().Unix() - startTime

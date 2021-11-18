@@ -8,8 +8,8 @@ import (
 )
 
 type Block struct {
-	PreviousHash string
-	Hash         string
+	PreviousHash []byte
+	Hash         []byte
 	Difficulty   int
 	Nonce        int
 	Timestamp    time.Time
@@ -18,7 +18,7 @@ type Block struct {
 	MinerRewards int
 }
 
-func (b *Block) New(previousHash string, difficulty int, miner string, minerRewards int) {
+func (b *Block) New(previousHash []byte, difficulty int, miner string, minerRewards int) {
 	b.PreviousHash = previousHash
 	b.Difficulty = difficulty
 	b.Nonce = 0
