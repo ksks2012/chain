@@ -3,6 +3,7 @@ package global
 import (
 	"crypto/sha1"
 	"fmt"
+	"log"
 	"strconv"
 	"time"
 )
@@ -26,6 +27,12 @@ func (b *Block) New(previousHash []byte, difficulty int, miner string, minerRewa
 	b.Transactions = []Transaction{}
 	b.Miner = miner
 	b.MinerRewards = minerRewards
+}
+
+func (b Block) GenGenesisBlock(previousHash []byte, difficulty int, miner string, minerRewards int64) {
+	log.Printf("Create genesis block...")
+	b.New(previousHash, difficulty, miner, minerRewards)
+	b.Hash = GetHash(b, 0)
 }
 
 func getTransactionsString(block Block) (transactionsString string) {

@@ -7,7 +7,6 @@ import (
 	"strings"
 
 	"github.com/block-chain/global"
-	"github.com/block-chain/pkg/blocker"
 	"github.com/block-chain/pkg/setting"
 )
 
@@ -32,7 +31,8 @@ func main() {
 	if err != nil {
 		difficulty = 1
 	}
-	newBlock := blocker.GenGenesisBlock([]byte("Hello Chain!"), difficulty, "hong", 1)
+	var newBlock global.Block
+	newBlock.GenGenesisBlock([]byte("Hello Chain!"), difficulty, "hong", 1)
 	global.MainChain.New(newBlock)
 	for i := 0; i <= 10; i++ {
 		global.MainChain.MineBlock("hong")
