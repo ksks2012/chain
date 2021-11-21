@@ -32,7 +32,8 @@ func main() {
 	if err != nil {
 		difficulty = 1
 	}
-	blocker.GenGenesisBlock([]byte("Hello Chain!"), difficulty, "hong", 1)
+	newBlock := blocker.GenGenesisBlock([]byte("Hello Chain!"), difficulty, "hong", 1)
+	global.MainChain.New(newBlock)
 	for i := 0; i <= 10; i++ {
 		global.MainChain.MineBlock("hong")
 	}

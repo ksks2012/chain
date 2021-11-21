@@ -23,7 +23,7 @@ var (
 )
 
 func (bc *BlockChain) New(initBlock Block) {
-	bc.AdjustDifficultyBlocks = 1
+	bc.AdjustDifficultyBlocks = 5
 	bc.Difficulty = initBlock.Difficulty
 	bc.Chain = append(bc.Chain, initBlock)
 }
@@ -59,7 +59,8 @@ func (bc *BlockChain) MineBlock(miner string) {
 
 	nonce := make([]byte, bc.Difficulty)
 	// log.Printf("nonce %v", nonce)
-	for ; !bytes.Equal(newBlock.Hash[0:bc.Difficulty], nonce); newBlock.Nonce++ {
+	for !bytes.Equal(newBlock.Hash[0:bc.Difficulty], nonce) {
+		newBlock.Nonce++
 		newBlock.Hash = GetHash(newBlock, newBlock.Nonce)
 	}
 	// log.Printf("nonce %v %v", newBlock.Hash[0:bc.Difficulty], newBlock.Hash[0:(bc.Difficulty*2)])
@@ -110,4 +111,21 @@ func (bc *BlockChain) getSurplus(account string) (surplus int64) {
 		}
 	}
 	return surplus
+}
+
+func (bc *BlockChain) VerifyBlockchain() bool {
+	previousHash := make([]byte, 0)
+	for idx, block := range bc.Chain {
+		if !bytes.Equal(GetHash(block, block.Nonce), block.Hash) {
+			log.Printf("Error: Hash not matched!")
+			return false
+		} else if !bytes.Equal(previousHash, block.PreviousHash) && idx != 0 {
+			log.Printf("Error: Hash not matched to previous hash!")
+			return false
+		}
+		previousHash = block.Hash
+	}
+	log.Printf("Hash correct!")
+	return true
+
 }
