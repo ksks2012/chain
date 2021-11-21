@@ -28,15 +28,10 @@ func (b *Block) New(previousHash []byte, difficulty int, miner string, minerRewa
 	b.MinerRewards = minerRewards
 }
 
-func transactionToString(transaction Transaction) (transactionstring string) {
-	transactionstring = fmt.Sprintf("%v%v%v%v%v", transaction.Sender, transaction.Receiver, transaction.Amounts, transaction.Fee, transaction.Message)
-	return
-}
-
 func getTransactionsString(block Block) (transactionsString string) {
 	transactionsString = ""
 	for _, transaction := range block.Transactions {
-		transactionsString += transactionToString(transaction)
+		transactionsString += transaction.transactionToString()
 	}
 	return
 }
