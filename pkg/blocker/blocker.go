@@ -1,17 +1,14 @@
 package blocker
 
 import (
-
-	// "github.com/block-chain/global"
-
 	"github.com/block-chain/pkg/rsakey"
 )
 
 var (
-	privateKey []byte
-	publicKey  []byte
+	PrivateKey []byte
+	PublicKey  []byte
 )
 
 func GenAddress() {
-	privateKey, publicKey = rsakey.GenRsaKey()
+	PrivateKey, PublicKey = rsakey.GenRsaKey()
 }

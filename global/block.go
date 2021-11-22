@@ -6,6 +6,9 @@ import (
 	"log"
 	"strconv"
 	"time"
+
+	"github.com/block-chain/pkg/blocker"
+	"github.com/block-chain/pkg/rsakey"
 )
 
 type Block struct {
@@ -50,4 +53,9 @@ func GetHash(block Block, nonce int) (bs []byte) {
 	bs = sha1Hasher.Sum(nil)
 	return
 
+}
+
+func SignTransaction(transaction Transaction) []byte {
+	transactionString := transaction.transactionToString()
+	return rsakey.RsaSignWithSha256([]byte(transactionString), blocker.PrivateKey)
 }

@@ -5,6 +5,7 @@ import (
 	"log"
 	"testing"
 
+	"github.com/block-chain/pkg/blocker"
 	"github.com/block-chain/pkg/rsakey"
 )
 
@@ -28,4 +29,11 @@ func TestRSAKey(t *testing.T) {
 	log.Printf("encode by public key： %x", hex.EncodeToString(ciphertext))
 	sourceData := rsakey.RsaDecrypt(ciphertext, prvKey)
 	log.Printf("decode by private key： %v", string(sourceData))
+}
+
+func TestChainWithRSA(t *testing.T) {
+	blocker.GenAddress()
+	for true {
+
+	}
 }

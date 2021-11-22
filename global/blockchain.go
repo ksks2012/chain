@@ -6,6 +6,9 @@ import (
 	"math"
 	"sort"
 	"time"
+
+	"github.com/block-chain/pkg/blocker"
+	"github.com/block-chain/pkg/rsakey"
 )
 
 type BlockChain struct {
@@ -90,7 +93,7 @@ func (bc *BlockChain) adjustDifficulty() int {
 	return bc.Difficulty
 }
 
-func (bc *BlockChain) getSurplus(account string) (surplus int64) {
+func (bc *BlockChain) GetSurplus(account string) (surplus int64) {
 	surplus = 0
 	for _, block := range bc.Chain {
 		miner := false
@@ -128,4 +131,21 @@ func (bc *BlockChain) VerifyBlockchain() bool {
 	log.Printf("Hash correct!")
 	return true
 
+}
+
+func (bc *BlockChain) AddTransaction(transaction Transaction, signature []byte) bool {
+	if transaction.Fee+transaction.Amounts > bc.GetSurplus(transaction.Sender) {
+		return false
+	}
+
+	transactionString := transaction.transactionToString()
+	log.Printf("transactionString %x", transactionString)
+	if rsakey.RsaVerySignWithSha256(
+		[]byte(transactionString), signature, blocker.PrivateKey) {
+		log.Printf("Authorized successfully!")
+		bc.PendingTransactions = append(bc.PendingTransactions, transaction)
+		return true
+	}
+	log.Printf("RSA Verified wrong!")
+	return false
 }
