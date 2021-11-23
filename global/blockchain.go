@@ -28,6 +28,7 @@ var (
 func (bc *BlockChain) New(initBlock Block) {
 	bc.AdjustDifficultyBlocks = 5
 	bc.Difficulty = initBlock.Difficulty
+	bc.MiningRewards = initBlock.MinerRewards
 	bc.Chain = append(bc.Chain, initBlock)
 }
 
