@@ -36,13 +36,14 @@ func main() {
 	global.MainChain.New(newBlock)
 	for i := 0; i <= 10; i++ {
 		global.MainChain.MineBlock("hong")
+		global.MainChain.AdjustDifficulty()
 	}
 
 }
 
 func setupFlag() error {
 	flag.StringVar(&cfg, "config", "etc/", "指定要使用的設定檔路徑")
-	flag.StringVar(&Diff, "Diff", "", "初始難度")
+	flag.StringVar(&Diff, "Diff", "1", "初始難度")
 	flag.Parse()
 
 	return nil

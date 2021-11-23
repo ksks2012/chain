@@ -71,10 +71,9 @@ func (bc *BlockChain) MineBlock(miner string) {
 	timeConsumed := time.Now().Unix() - startTime
 	log.Printf("Hash found: %x @ diffuculty %v, time cost: %vs", []byte(newBlock.Hash), bc.Difficulty, timeConsumed)
 	bc.Chain = append(bc.Chain, newBlock)
-	bc.adjustDifficulty()
 }
 
-func (bc *BlockChain) adjustDifficulty() int {
+func (bc *BlockChain) AdjustDifficulty() int {
 	chainLength := len(bc.Chain)
 	if (chainLength%bc.AdjustDifficultyBlocks != 1) && chainLength <= bc.AdjustDifficultyBlocks {
 		return bc.Difficulty
@@ -93,11 +92,11 @@ func (bc *BlockChain) adjustDifficulty() int {
 	return bc.Difficulty
 }
 
-func (bc *BlockChain) GetSurplus(account string) (surplus int64) {
+func (bc *BlockChain) GetSurplus(account []byte) (surplus int64) {
 	surplus = 0
 	for _, block := range bc.Chain {
 		miner := false
-		if block.Miner == account {
+		if bytes.Equal(block.Miner, account) {
 			miner = true
 			surplus += block.MinerRewards
 		}
@@ -105,10 +104,10 @@ func (bc *BlockChain) GetSurplus(account string) (surplus int64) {
 			if miner {
 				surplus += transaction.Fee
 			}
-			if transaction.Sender == account {
+			if bytes.Equal([]byte(transaction.Sender), account) {
 				surplus -= transaction.Amounts
 				surplus -= transaction.Fee
-			} else if transaction.Receiver == account {
+			} else if bytes.Equal([]byte(transaction.Receiver), account) {
 				surplus += transaction.Amounts
 			}
 		}
@@ -137,11 +136,9 @@ func (bc *BlockChain) AddTransaction(transaction Transaction, signature []byte) 
 	if transaction.Fee+transaction.Amounts > bc.GetSurplus(transaction.Sender) {
 		return false
 	}
-
 	transactionString := transaction.transactionToString()
-	log.Printf("transactionString %x", transactionString)
 	if rsakey.RsaVerySignWithSha256(
-		[]byte(transactionString), signature, blocker.PrivateKey) {
+		[]byte(transactionString), signature, blocker.PublicKey) {
 		log.Printf("Authorized successfully!")
 		bc.PendingTransactions = append(bc.PendingTransactions, transaction)
 		return true

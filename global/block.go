@@ -18,7 +18,7 @@ type Block struct {
 	Nonce        int
 	Timestamp    int64
 	Transactions []Transaction
-	Miner        string
+	Miner        []byte
 	MinerRewards int64
 }
 
@@ -28,7 +28,7 @@ func (b *Block) New(previousHash []byte, difficulty int, miner string, minerRewa
 	b.Nonce = 0
 	b.Timestamp = time.Now().Unix()
 	b.Transactions = []Transaction{}
-	b.Miner = miner
+	b.Miner = blocker.PublicKey
 	b.MinerRewards = minerRewards
 }
 

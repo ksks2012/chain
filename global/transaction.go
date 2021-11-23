@@ -3,10 +3,12 @@ package global
 import (
 	"fmt"
 	"log"
+
+	"github.com/block-chain/pkg/blocker"
 )
 
 type Transaction struct {
-	Sender   string
+	Sender   []byte
 	Receiver string
 	Amounts  int64 //TODO:
 	Fee      int64 //TODO:
@@ -19,14 +21,14 @@ func (t Transaction) transactionToString() (transactionstring string) {
 }
 
 func (t Transaction) New(sender string, receiver string, amount int64, fee int64, message string) {
-	t.Sender = sender
+	t.Sender = blocker.PublicKey
 	t.Receiver = receiver
 	t.Amounts = amount
 	t.Fee = fee
 	t.Message = message
 }
 
-func InitialTransaction(sender string, receiver string, amount int64, fee int64, message string) Transaction {
+func InitialTransaction(sender []byte, receiver string, amount int64, fee int64, message string) Transaction {
 	if MainChain.GetSurplus(sender) < amount+fee {
 		log.Printf("Surplus not enough!")
 		return Transaction{}
