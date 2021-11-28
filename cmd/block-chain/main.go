@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/block-chain/global"
+	"github.com/block-chain/internal/service"
 	"github.com/block-chain/pkg/setting"
 )
 
@@ -31,12 +32,12 @@ func main() {
 	if err != nil {
 		difficulty = 1
 	}
-	var newBlock global.Block
+	var newBlock service.Block
 	newBlock.GenGenesisBlock([]byte("Hello Chain!"), difficulty, "hong", 1)
-	global.MainChain.New(newBlock)
+	service.MainChain.New(newBlock)
 	for i := 0; i <= 10; i++ {
-		global.MainChain.MineBlock("hong")
-		global.MainChain.AdjustDifficulty()
+		service.MainChain.MineBlock("hong")
+		service.MainChain.AdjustDifficulty()
 	}
 
 }

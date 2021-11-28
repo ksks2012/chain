@@ -1,4 +1,4 @@
-package global
+package service
 
 import (
 	"fmt"
@@ -9,9 +9,9 @@ import (
 
 type Transaction struct {
 	Sender   []byte
-	Receiver string
-	Amounts  int64 //TODO:
-	Fee      int64 //TODO:
+	Receiver string // TODO: []byte
+	Amounts  int64  //TODO:
+	Fee      int64  //TODO:
 	Message  string
 }
 

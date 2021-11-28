@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"github.com/block-chain/global"
+	"github.com/block-chain/internal/service"
 	"github.com/block-chain/pkg/blocker"
 	"github.com/block-chain/pkg/setting"
 )
@@ -35,26 +36,26 @@ func main() {
 	if err != nil {
 		difficulty = 1
 	}
-	var newBlock global.Block
+	var newBlock service.Block
 	newBlock.GenGenesisBlock([]byte("Hello Chain!"), difficulty, "hong", 10)
-	global.MainChain.New(newBlock)
+	service.MainChain.New(newBlock)
 	for i := 0; i <= 3; i++ {
 		// Step1: initialize a transaction
-		transaction := global.InitialTransaction(
+		transaction := service.InitialTransaction(
 			// string(rsakey.RsaSignWithSha256([]byte(miner), blocker.PrivateKey)),
 			blocker.PublicKey,
 			"test123",
 			1,
 			1,
 			"Test")
-		if !reflect.DeepEqual(transaction, global.Transaction{}) {
+		if !reflect.DeepEqual(transaction, service.Transaction{}) {
 			// Step2: Sign your transaction
-			signature := global.SignTransaction(transaction)
+			signature := service.SignTransaction(transaction)
 			// Step3: Send it to blockchain
-			global.MainChain.AddTransaction(transaction, signature)
-			global.MainChain.MineBlock(miner)
-			global.MainChain.AdjustDifficulty()
-			log.Printf("Surplus %v", global.MainChain.GetSurplus(blocker.PublicKey))
+			service.MainChain.AddTransaction(transaction, signature)
+			service.MainChain.MineBlock(miner)
+			service.MainChain.AdjustDifficulty()
+			log.Printf("Surplus %v", service.MainChain.GetSurplus(blocker.PublicKey))
 		}
 	}
 
