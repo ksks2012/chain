@@ -4,7 +4,7 @@ type BlockChainSettingS struct {
 	AdjustDifficultyBlocks int
 	Difficulty             int
 	BlockTime              int
-	MiningRewards          int
+	MiningRewards          int64
 	BlockLimitation        int
 }
 

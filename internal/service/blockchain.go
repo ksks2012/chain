@@ -9,6 +9,7 @@ import (
 
 	"github.com/block-chain/pkg/blocker"
 	"github.com/block-chain/pkg/rsakey"
+	"github.com/block-chain/pkg/setting"
 )
 
 type BlockChain struct {
@@ -25,10 +26,10 @@ var (
 	MainChain BlockChain
 )
 
-func (bc *BlockChain) New(initBlock Block) {
-	bc.AdjustDifficultyBlocks = 5
-	bc.Difficulty = initBlock.Difficulty
-	bc.MiningRewards = initBlock.MinerRewards
+func (bc *BlockChain) New(initBlock Block, cfgSetting setting.BlockChainSettingS) {
+	bc.AdjustDifficultyBlocks = cfgSetting.AdjustDifficultyBlocks
+	bc.Difficulty = cfgSetting.Difficulty
+	bc.MiningRewards = cfgSetting.MiningRewards
 	bc.Chain = append(bc.Chain, initBlock)
 }
 

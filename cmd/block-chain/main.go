@@ -3,7 +3,6 @@ package main
 import (
 	"flag"
 	"log"
-	"strconv"
 	"strings"
 
 	"github.com/block-chain/global"
@@ -28,13 +27,9 @@ func init() {
 }
 
 func main() {
-	difficulty, err := strconv.Atoi(Diff)
-	if err != nil {
-		difficulty = 1
-	}
 	var newBlock service.Block
-	newBlock.GenGenesisBlock([]byte("Hello Chain!"), difficulty, "hong", 1)
-	service.MainChain.New(newBlock)
+	newBlock.GenGenesisBlock([]byte("Hello Chain!"), global.BlockChainSetting.Difficulty, "hong", 1)
+	service.MainChain.New(newBlock, *global.BlockChainSetting)
 	for i := 0; i <= 10; i++ {
 		service.MainChain.MineBlock("hong")
 		service.MainChain.AdjustDifficulty()
@@ -44,7 +39,6 @@ func main() {
 
 func setupFlag() error {
 	flag.StringVar(&cfg, "config", "etc/", "指定要使用的設定檔路徑")
-	flag.StringVar(&Diff, "Diff", "1", "初始難度")
 	flag.Parse()
 
 	return nil
