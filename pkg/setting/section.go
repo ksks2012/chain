@@ -8,6 +8,12 @@ type BlockChainSettingS struct {
 	BlockLimitation        int
 }
 
+type SocketSettingS struct {
+	Host string
+	Port string
+	Zone string
+}
+
 var sections = make(map[string]interface{})
 
 func (s *Setting) ReadSection(k string, v interface{}) error {
