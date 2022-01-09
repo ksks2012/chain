@@ -12,3 +12,11 @@ https://github.com/lkm543/it_iron_man_2019/tree/master/code
 ```
 go build ./cmd/block-chain
 ```
+
+# Test
+## Test Socket
+
+```
+go test -v ./test/socket_server_test.go
+go test -v ./test/socket_client_test.go
+```

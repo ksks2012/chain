@@ -3,11 +3,22 @@ package socket
 import (
 	"log"
 	"net"
+	"os"
+	"os/signal"
+	"strings"
+	"sync"
 
 	"github.com/block-chain/pkg/setting"
 )
 
+var (
+	waitGroup sync.WaitGroup = sync.WaitGroup{}
+)
+
 func StartSocketServer(cfgSetting setting.SocketSettingS) {
+	stop_chan := make(chan os.Signal)
+	signal.Notify(stop_chan, os.Interrupt)
+
 	log.Printf("Usage: %s ip-addr\n", cfgSetting.Host)
 
 	name := cfgSetting.Host
@@ -22,26 +33,46 @@ func StartSocketServer(cfgSetting setting.SocketSettingS) {
 	if err != nil {
 		log.Println("Error listening:", err.Error())
 	}
+
+	go func() {
+		<-stop_chan
+		log.Printf("Get Stop Command. Now Stoping...")
+		if err = netListen.Close(); err != nil {
+			log.Panic(err)
+		}
+	}()
+
 	for {
 		connection, err := netListen.Accept()
 		if err != nil {
+			if strings.Contains(err.Error(), "use of closed network connection") {
+				break
+			}
+			log.Panic("accept error\n")
 			continue
 		}
 		log.Println(connection.RemoteAddr().String(), " tcp connection success")
-		handleConnection(connection)
+		waitGroup.Add(1)
+		go handleConnection(connection)
 	}
+
+	waitGroup.Wait()
 }
 
 func handleConnection(connection net.Conn) {
+	defer waitGroup.Done()
+	defer connection.Close()
+	addr := connection.RemoteAddr()
+	// TODO: buffer size
 	buffer := make([]byte, 2048)
 
 	for {
 		n, err := connection.Read(buffer)
 		if err != nil {
-			log.Println(connection.RemoteAddr().String(), " connectionion error: ", err)
-			return
+			log.Println(addr.String(), " connectionion error: ", err)
+			break
 		}
-		log.Println(connection.RemoteAddr().String(), "receive data string:\n", string(buffer[:n]))
-
+		log.Println(addr.String(), "receive data string:\n", string(buffer[:n]))
 	}
+	log.Printf("%v disconnect:\n", addr.String())
 }

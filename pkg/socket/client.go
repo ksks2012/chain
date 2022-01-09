@@ -21,7 +21,7 @@ func StartSocketClient(cfgSetting setting.SocketSettingS) {
 		log.Printf("Fatal error: %s", err.Error())
 		os.Exit(1)
 	}
-
+	defer connection.Close()
 	fmt.Println("connectionect success")
 	sender(connection)
 }
